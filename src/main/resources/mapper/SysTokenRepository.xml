@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chai.shirotest.modules.shiro.dao.SysTokenRepository">
+    <resultMap id="sysToken" type="com.chai.shirotest.modules.shiro.entity.SysToken">
+        <id property="userId" column="user_id"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="token" column="token"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="abc">
+        SELECT user_id, expire_time, token, update_time FROM sys_token
+    </sql>
+
+    <select id="findByUserId" resultMap="sysToken" parameterType="Integer">
+        <include refid="abc"/>
+        where user_id = #{userId}
+    </select>
+    <insert id="updateToken" parameterType="com.chai.shirotest.modules.shiro.entity.SysToken">
+        update sys_token set token = #{token}, update_time = #{updateTime}, expire_time = #{expireTime}
+        where user_id = #{userId}
+    </insert>
+
+    <select id="findByToken" parameterType="string" resultMap="sysToken">
+        SELECT user_id, expire_time, token, update_time FROM sys_token where token = #{accessToken}
+    </select>
+    <insert id="insertLoginToken" parameterType="com.chai.shirotest.modules.shiro.entity.SysToken">
+        insert into sys_token
+        ( user_id, token, update_time, expire_time)
+        values(#{userId}, #{token}, #{updateTime}, #{expireTime})
+    </insert>
+</mapper>

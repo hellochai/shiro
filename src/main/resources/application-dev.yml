@@ -1,0 +1,46 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQQL5Dialect
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+        time-between-eviction-runs: 5000
+
+mybatis:
+  type-aliases-package: com.chai.shirotest.modules.shiro.entity
+  mapper-locations: classpath:mapper/*.xml
+
+swagger:
+  enabled: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chai.shirotest.modules.shiro.dao.PermissionRepository">
+    <resultMap id="permission" type="com.chai.shirotest.modules.shiro.entity.Permission">
+        <result property="permission" column="permission"/>
+        <result property="permissionId" column="permission_id"/>
+        <result property="permissionName" column="permission_name"/>
+    </resultMap>
+
+    <select id="getAllPerms" resultMap="permission">
+        select permission_id, permission, permission_name from permission
+    </select>
+
+    <resultMap id="getUserPerms" type="com.chai.shirotest.modules.shiro.entity.UserRolePermission">
+       <result property="roleName" column="role_name"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="username"/>
+        <result property="permissionName" column="permission_name"/>
+    </resultMap>
+    <select id="getUserPerms" resultMap="getUserPerms">
+        SELECT
+	        `user`.user_id, `username`,`permission`, `permission_name`, role.role_name
+        FROM
+            `permission`,
+            `user`,
+            `role_permission`,
+            `role`,
+            `user_role`
+        WHERE
+            role_permission.permission_id = permission.permission_id
+            and
+            role.role_id = role_permission.role_id
+            and `user`.user_id=user_role.user_id
+            and user_role.role_id = role_permission.role_id
+            and `user`.user_id = #{userId}
+    </select>
+
+    <resultMap type="com.chai.shirotest.modules.shiro.entity.UserRoleName" id="UserRoleName">
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+    </resultMap>
+
+    <select id="getRolesByUserId" resultMap="UserRoleName">
+        SELECT
+            `role`.role_id,role_name, user_id
+        FROM
+            role
+        JOIN user_role ON user_role.role_id = role.role_id
+        WHERE
+            user_id = #{userId}
+    </select>
+</mapper>
